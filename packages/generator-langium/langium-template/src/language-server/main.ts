@@ -1,5 +1,5 @@
 import { startLanguageServer } from 'langium';
-import { createConnection, ProposedFeatures } from 'vscode-languageserver/node';
+import { createConnection, ProposedFeatures } from 'langium/shared/vscode-languageserver/node';
 import { create<%= LanguageName %>Services } from './<%= language-id %>-module';
 
 // Create a connection to the client

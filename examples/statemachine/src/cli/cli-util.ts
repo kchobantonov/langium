@@ -5,10 +5,10 @@
  ******************************************************************************/
 
 import fs from 'fs';
+import path from 'path';
 import colors from 'colors';
 import { AstNode, LangiumDocument, LangiumServices } from 'langium';
-import path from 'path';
-import { URI } from 'vscode-uri';
+import { URI } from 'langium/shared/vscode-uri';
 
 export async function extractDocument(fileName: string, extensions: string[], services: LangiumServices): Promise<LangiumDocument> {
     if (!extensions.includes(path.extname(fileName))) {
