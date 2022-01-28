@@ -79,6 +79,34 @@ describe('Predicated grammar rules', () => {
 
 });
 
+describe('Handle unordered group', () => {
+    let grammar: Grammar;
+    const content = `
+    grammar TestUnorderedGroup
+
+    Book: 
+    'book' name=STRING 
+    (
+    ("description" descr=STRING)
+    & ("edition" version=STRING)?
+    & ("author" author=STRING)
+    )
+    ;
+    terminal STRING: /"[^"]*"|'[^']*'/;
+    `;
+
+    beforeAll(async () => {
+        grammar = (await helper(content)).document.parseResult.value;
+    });
+
+    test('Should work without Parser Definition Errors', () => {
+        expect(() => {
+            parserFromGrammar(grammar);
+        }).not.toThrow();
+    });
+
+});
+
 describe('One name for terminal and non-terminal rules', () => {
     let grammar: Grammar;
     const content = `

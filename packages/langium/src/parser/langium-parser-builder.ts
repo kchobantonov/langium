@@ -222,7 +222,34 @@ function buildAlternatives(ctx: RuleContext, alternatives: Alternatives): Method
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function buildUnorderedGroup(ctx: RuleContext, group: UnorderedGroup): Method {
-    throw new Error('Unordered groups are not supported (yet)');
+    if (group.elements.length === 1) {
+        return buildElement(ctx, group.elements[0]);
+    }
+    const methods: PredicatedMethod[] = [];
+
+    for (const element of group.elements) {
+        const predicatedMethod: PredicatedMethod = {
+            ALT: buildElement(ctx, element)
+        };
+        if (isGroup(element) && element.guardCondition) {
+            predicatedMethod.GATE = buildPredicate(element.guardCondition);
+        }
+        methods.push(predicatedMethod);
+    }
+
+    const idx = ctx.or++;
+    const alternatives: Method = (args) => ctx.parser.alternatives(idx, methods.map(method => {
+        const alt: IOrAlt<unknown> = {
+            ALT: () => method.ALT(args),
+            IGNORE_AMBIGUITIES: true // TODO check this
+        };
+        const gate = method.GATE;
+        if (gate) {
+            alt.GATE = () => gate(args);
+        }
+        return alt;
+    }));
+    return wrap(ctx, alternatives, '*');
 }
 
 function buildGroup(ctx: RuleContext, group: Group): Method {

@@ -36,7 +36,7 @@ export class LangiumGrammarValidationRegistry extends ValidationRegistry {
                 validator.checkEmptyTerminalRule
             ],
             Keyword: validator.checkKeyword,
-            UnorderedGroup: validator.checkUnorderedGroup,
+            //UnorderedGroup: validator.checkUnorderedGroup,
             Grammar: [
                 validator.checkGrammarName,
                 validator.checkEntryGrammarRule,
@@ -104,7 +104,7 @@ export class LangiumGrammarValidator {
             } else {
                 accept('error', 'This grammar is missing an entry parser rule.', { node: grammar, property: 'name' });
             }
-        } else if(!grammar.isDeclared && entryRules.length >= 1) {
+        } else if (!grammar.isDeclared && entryRules.length >= 1) {
             entryRules.forEach(rule => accept('error', 'Cannot declare entry rules for unnamed grammars.', { node: rule, property: 'name' }));
         } else if (entryRules.length > 1) {
             entryRules.forEach(rule => accept('error', 'The entry rule has to be unique.', { node: rule, property: 'name' }));
@@ -216,7 +216,7 @@ export class LangiumGrammarValidator {
 
     checkGrammarHiddenTokens(grammar: ast.Grammar, accept: ValidationAcceptor): void {
         if (grammar.definesHiddenTokens) {
-            accept('error', 'Hidden terminals are declared at the terminal definition.', { node: grammar, property: 'definesHiddenTokens', code: IssueCodes.HiddenGrammarTokens});
+            accept('error', 'Hidden terminals are declared at the terminal definition.', { node: grammar, property: 'definesHiddenTokens', code: IssueCodes.HiddenGrammarTokens });
         }
     }
 
@@ -379,10 +379,11 @@ export class LangiumGrammarValidator {
         }
     }
 
-    checkUnorderedGroup(unorderedGroup: ast.UnorderedGroup, accept: ValidationAcceptor): void {
-        accept('error', 'Unordered groups are currently not supported', { node: unorderedGroup });
-    }
-
+    /*
+        checkUnorderedGroup(unorderedGroup: ast.UnorderedGroup, accept: ValidationAcceptor): void {
+           accept('error', 'Unordered groups are currently not supported', { node: unorderedGroup });
+        }
+    */
     checkRuleParametersUsed(rule: ast.ParserRule, accept: ValidationAcceptor): void {
         const parameters = rule.parameters;
         if (parameters.length > 0) {
